@@ -3,5 +3,5 @@ export interface Character {
   name: string;
   rarity: number;
   element: string;
-  image: string;
+  image: string; // Define image as a string (path to the image)
 }
