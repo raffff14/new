@@ -1,125 +1,39 @@
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap');
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 /* Body and Background */
 body {
-  font-family: 'Poppins', sans-serif;
-  background: linear-gradient(135deg, #1e3a8a, #4f46e5);
-  color: white;
   margin: 0;
   padding: 0;
-  min-height: 100vh;
+  font-family: 'Orbitron', sans-serif;
+  background: linear-gradient(135deg, #4a0e4e, #81007f);
+  color: #ffffff;
 }
 
-h1, h2, h3 {
-  font-weight: bold;
-  text-transform: uppercase;
-}
-
-.min-h-screen {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-}
-
-/* Header */
-header {
-  padding: 20px;
-  background: rgba(0, 0, 0, 0.6);
-  border-radius: 10px;
-}
-
-header h1 {
-  font-size: 2rem;
-  color: #f9fafb;
-  text-shadow: 0 0 10px rgba(255, 255, 255, 0.7);
-}
-
-header div {
-  display: flex;
-  align-items: center;
-}
-
-button {
-  transition: background-color 0.3s, transform 0.3s;
-}
-
-button:hover {
-  transform: scale(1.05);
-}
-
-/* Dino Coin Display */
-.bg-white {
-  background: linear-gradient(145deg, #f9fafb, #e5e7eb);
-  color: black;
-  border: 2px solid #e5e7eb;
-  box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.15);
-  transition: transform 0.2s;
-}
-
-.bg-white:hover {
-  transform: scale(1.1);
-}
-
-/* Summon Banner */
-img.rounded-lg {
-  max-width: 80%;
-  box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.7);
-  transition: transform 0.2s;
-}
-
-img.rounded-lg:hover {
-  transform: scale(1.05);
-}
-
-/* Summon Buttons */
-button.bg-purple-500 {
-  background: linear-gradient(145deg, #7e22ce, #9333ea);
-  border: 2px solid rgba(255, 255, 255, 0.2);
-  box-shadow: 0px 4px 15px rgba(148, 44, 255, 0.7);
-  border-radius: 8px;
-}
-
-button.bg-purple-500:hover {
-  box-shadow: 0px 4px 25px rgba(148, 44, 255, 0.9);
-  background: #a855f7;
-}
-
-button.bg-yellow-500 {
-  background: linear-gradient(145deg, #d97706, #f59e0b);
-  border: 2px solid rgba(255, 255, 255, 0.2);
-  box-shadow: 0px 4px 15px rgba(255, 220, 0, 0.7);
-  border-radius: 8px;
-}
-
-button.bg-yellow-500:hover {
-  box-shadow: 0px 4px 25px rgba(255, 220, 0, 0.9);
-  background: #fbbf24;
-}
-
-/* Pulled Character Card */
 .GachaCard {
-  width: 18rem;
-  background: rgba(255, 255, 255, 0.9);
-  border-radius: 1rem;
-  box-shadow: 0px 8px 30px rgba(0, 0, 0, 0.5);
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  border-radius: 16px;
   overflow: hidden;
-  transition: transform 0.3s ease-in-out;
+  transition: all 0.3s ease;
 }
 
 .GachaCard:hover {
-  transform: translateY(-10px);
+  transform: translateY(-10px) rotate(2deg);
+  box-shadow: 0 20px 30px rgba(0, 0, 0, 0.3);
 }
 
 .GachaCard img {
   width: 100%;
-  height: 15rem;
+  height: 300px;
   object-fit: cover;
-  border-bottom: 4px solid #9333ea;
+  border-bottom: 4px solid #f59e0b;
 }
 
 .GachaCard .p-4 {
-  background: rgba(0, 0, 0, 0.7);
+  background: linear-gradient(to bottom, rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.9));
   padding: 20px;
 }
 
@@ -127,7 +41,7 @@ button.bg-yellow-500:hover {
   font-size: 1.5rem;
   font-weight: bold;
   margin-bottom: 10px;
-  color: #fbbf24;
+  color: #f59e0b;
   text-transform: uppercase;
 }
 
@@ -139,4 +53,40 @@ button.bg-yellow-500:hover {
 
 .GachaCard p:last-child {
   color: #60a5fa;
+}
+
+/* Add a glowing effect to the summon buttons */
+.bg-gradient-to-r {
+  position: relative;
+  overflow: hidden;
+}
+
+.bg-gradient-to-r::after {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(
+    to bottom right,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(255, 255, 255, 0.1) 50%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  transform: rotate(30deg);
+  animation: shinyEffect 3s linear infinite;
+}
+
+
+
+
+
+@keyframes shinyEffect {
+  from {
+    transform: rotate(30deg) translateX(-100%);
+  }
+  to {
+    transform: rotate(30deg) translateX(100%);
+  }
 }
