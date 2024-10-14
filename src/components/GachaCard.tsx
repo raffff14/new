@@ -1,8 +1,7 @@
-// src/components/GachaCard.tsx
 import React from "react";
 import { motion } from "framer-motion";
 import { Character } from "../types";
-import { Star, Zap } from "lucide-react";
+import { Star } from "lucide-react";
 import { elementIcons } from "./elementIcons";
 
 interface GachaCardProps {
@@ -12,7 +11,7 @@ interface GachaCardProps {
 const GachaCard: React.FC<GachaCardProps> = ({ character }) => {
   return (
     <motion.div
-      className="bg-gradient-to-br from-indigo-500 to-purple-600 rounded-xl shadow-xl overflow-hidden w-72 transform transition-all duration-300 hover:scale-105"
+      className="bg-gradient-to-br from-indigo-500 to-purple-600 rounded-xl shadow-xl overflow-hidden max-w-xs transform transition-all duration-300 hover:scale-105"
       initial={{ scale: 0, opacity: 0 }} // Initial state
       animate={{ scale: 1, opacity: 1 }} // Animation to apply
       transition={{ duration: 0.3 }} // Duration of animation
@@ -21,7 +20,7 @@ const GachaCard: React.FC<GachaCardProps> = ({ character }) => {
         <img
           src={`./images/${character.image}`}
           alt={character.name}
-          className="w-full h-96 object-cover"
+          className="w-full h-full object-cover" // Aspect ratio 3:4
         />
         <div className="absolute top-0 left-0 bg-black bg-opacity-50 text-white px-3 py-1 rounded-br-lg">
           {Array.from({ length: character.rarity }).map((_, index) => (
@@ -46,9 +45,6 @@ const GachaCard: React.FC<GachaCardProps> = ({ character }) => {
               />
               {character.element} Vision
             </p>
-            <button className="bg-blue-600 text-white px-4 py-1 rounded-full text-sm hover:bg-blue-700 transition-colors duration-200">
-              Details
-            </button>
           </div>
         </div>
       </div>

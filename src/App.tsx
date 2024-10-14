@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from "react";
 import Web3 from "web3";
-import { Sparkles, Coins } from "lucide-react";
+import { Sparkles, ShoppingCart } from "lucide-react";
 import { BrowserRouter as Router, Route, Routes, Link } from "react-router-dom";
 import GachaCard from "./components/GachaCard";
 import Collection from "./components/Collection";
+import Marketplace from "./components/Marketplace";
 import { Character } from "./types";
 import { characters } from "./data/characters";
 import dinoCoinLogo from "../images/dinoCoinLogo.png";
@@ -16,8 +17,8 @@ function App() {
     null
   );
   const [collection, setCollection] = useState<Character[]>([]);
-  const [dinoCoins, setDinoCoins] = useState(20);
   const [showCollection, setShowCollection] = useState(false);
+  const [showMarketplace, setShowMarketplace] = useState(false);
 
   useEffect(() => {
     async function loadWeb3() {
@@ -61,20 +62,43 @@ function App() {
         setPulledCharacter(newCharacter);
         setCollection((prev) => [...prev, newCharacter]);
       } else {
-        setDinoCoins((prev) => prev + 5);
-        alert(
-          "You've already collected this character! You've received 5 Dino Coins."
-        );
+        alert("You've already collected this character!");
       }
     } catch (error) {
       console.error("Failed to pull gacha:", error);
     }
   };
 
+  const handlePurchase = async (character: Character) => {
+    if (!account || !web3) return;
+
+    try {
+      const transaction = {
+        from: account,
+        to: character.contractAddress, // Replace with the correct NFT contract address
+        value: web3.utils.toWei(character.price.toString(), "ether"),
+      };
+
+      // Send the transaction to the blockchain
+      await web3.eth.sendTransaction(transaction);
+
+      // If purchase is successful, add the character to the user's collection
+      if (!collection.some((char) => char.id === character.id)) {
+        setCollection((prev) => [...prev, character]);
+        alert(`You have successfully purchased ${character.name}!`);
+      } else {
+        alert("You already own this character!");
+      }
+    } catch (error) {
+      console.error("Failed to purchase NFT:", error);
+      alert("Purchase failed. Please try again.");
+    }
+  };
+
   return (
     <Router>
       <div className="min-h-screen bg-gradient-to-br from-purple-900 to-indigo-900 p-6">
-        <header className="flex justify-between items-center mb-6 bg-black bg-opacity-50 p-4 rounded-lg">
+        <header className="sticky top-0 z-50 flex justify-between items-center mb-6 bg-black bg-opacity-50 p-4 rounded-lg">
           <img
             src={dinoCoinLogo}
             alt="Dino Coin Logo"
@@ -84,10 +108,6 @@ function App() {
             DinoNFT Gacha
           </h1>
           <div className="flex items-center space-x-4">
-            <div className="bg-gradient-to-r from-yellow-400 to-yellow-600 text-black font-bold px-4 py-2 rounded-full flex items-center">
-              <Coins className="w-5 h-5 mr-2" />
-              <span>{dinoCoins}</span>
-            </div>
             <button
               onClick={connectWallet}
               className="bg-gradient-to-r from-pink-500 to-purple-600 text-white px-4 py-2 rounded-full hover:from-pink-600 hover:to-purple-700 transition duration-300"
@@ -101,6 +121,13 @@ function App() {
               className="bg-gradient-to-r from-green-400 to-blue-500 text-white px-4 py-2 rounded-full hover:from-green-500 hover:to-blue-600 transition duration-300"
             >
               {showCollection ? "Hide Collection" : "Show Collection"}
+            </button>
+            <button
+              onClick={() => setShowMarketplace((prev) => !prev)}
+              className="bg-gradient-to-r from-orange-400 to-red-500 text-white px-4 py-2 rounded-full hover:from-orange-500 hover:to-red-600 transition duration-300"
+            >
+              <ShoppingCart className="w-5 h-5 mr-2 inline" />
+              {showMarketplace ? "Hide Marketplace" : "Show Marketplace"}
             </button>
           </div>
         </header>
@@ -141,10 +168,25 @@ function App() {
           </div>
         )}
 
+        {showMarketplace && (
+          <div className="mt-10">
+            <Marketplace collection={characters} onPurchase={handlePurchase} />
+          </div>
+        )}
+
         <Routes>
           <Route
             path="/collection"
             element={<Collection collection={collection} />}
+          />
+          <Route
+            path="/marketplace"
+            element={
+              <Marketplace
+                collection={characters}
+                onPurchase={handlePurchase}
+              />
+            }
           />
           <Route
             path="/"
